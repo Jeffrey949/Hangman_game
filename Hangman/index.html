@@ -5,24 +5,52 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
+  <script src = "js/words.js" defer></script>
   <script src = "js/app.js" defer></script>
   <title>Hangman</title>
 </head>
 <body>
-  <div class="galgen">
-    <div class="vertical-beam "></div>
-    <div class="horizontal-beam"></div>
-    <div class="noose"></div>
-    <div class="head"></div>
-    <div class="body"></div>
-    <div class="left-arm"></div>
-    <div class="right-arm"></div>
-    <div class="left-leg"></div>
-    <div class="right-leg"></div>
-  </div>
-  <div>
-    <p>Fehler: </p>
-    <p>Zeit(sek): </p>
+  <div id="wrapper" >
+    <div id="inner-top">
+      <div class="galgen">
+        <div class="vertical-beam passiv"></div>
+        <div class="horizontal-beam passiv"></div>
+        <div class="noose passiv"></div>
+        <div class="head passiv"></div>
+        <div class="body passiv"></div>
+        <div class="left-arm passiv"></div>
+        <div class="right-arm passiv"></div>
+        <div class="left-leg passiv"></div>
+        <div class="right-leg passiv"></div>
+      </div>
+      <div id="word-section">
+        <!-- <h4>Errate das Wort </h4> -->
+        <p>J</p>
+        <p>A</p>
+        <p>V</p>
+        <p>A</p>
+        <p>S</p>
+        <p>C</p>
+        <p>R</p>
+        <p>I</p>
+        <p>P</p>
+        <p>T</p>
+      </div>
+    </div>
+    <fieldset>
+      <legend><strong>Deine falsch genannten Buchstaben</strong> </legend>
+      <div id="kasten-buchstaben">
+        <ul>
+          <li><del>T</del></li>
+          <li><del>E</del></li>
+          <li><del>S</del></li>
+          <li><del>T</del></li>
+          <li><del>1</del></li>
+          <li><del>2</del></li>
+          <li><del>3</del></li>
+        </ul>
+      </div>
+    </fieldset>
   </div>
 </body>
 </html>

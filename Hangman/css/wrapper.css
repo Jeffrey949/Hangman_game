@@ -1,0 +1,42 @@
+#wrapper {
+  border: 3px solid green;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#inner-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+#kasten-buchstaben{
+  width: 100%;
+  height: 200px;
+  /* border: 2px solid white; */
+  /* margin-left: 100px; */
+}
+
+#word-section{
+  width: 70%;
+  height: 300px;
+  border: solid 2px white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+}
+
+#word-section p {
+  font-size: 50px;
+}
+
+#kasten-buchstaben li {
+  float: left;
+  list-style-type: none;
+  font-size: 50px;
+  color: red;
+  margin-right: 8px;
+
+}

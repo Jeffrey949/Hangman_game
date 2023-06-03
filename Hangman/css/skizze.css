@@ -1,8 +1,9 @@
 .galgen {
-  width: 250px;
+  width: 30%;
   height: 300px;
   /* margin: 0 auto; */
   position: relative;
+  border: solid 2px white;
 }
 
 .vertical-beam {
