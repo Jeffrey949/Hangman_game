@@ -4,7 +4,7 @@ function gameOn() {
   function initVaris() {
     le = wörter.length;
     zufall = Math.floor(Math.random() * le);
-    eingabe = "e";
+    eingabe = "";
     counter = 0;
     correct_word = wörter[zufall].toUpperCase();
     charIndex = [];
@@ -28,6 +28,7 @@ function gameOn() {
     eingabe = e.key.toUpperCase();
     checkInput();
     // showChar();
+    drawSketch();
 
   }
 
@@ -56,6 +57,14 @@ function gameOn() {
     }
   }
 
+  function drawSketch() {
+    // Abhängig der des Counter-Wertes, werden Teile der Skizze angezeigt
+    if (counter > 0 && counter < 10) {
+      // el(`#${counter + 100}`).classList.remove("passiv");
+      document.getElementById((counter + 100)).classList.remove("passiv")
+    }
+  }
+
   // function showChar() {
   //   for (let i = 0; i < charIndex.length; i++) {
   //     document.getElementById(charIndex[i]).innerText = correct_word[charIndex[i]];
@@ -64,13 +73,13 @@ function gameOn() {
   // }
 
 
-  function keyUp(e) {
+  // function keyUp(e) {
 
-  }
+  // }
 
 
   document.addEventListener("keydown", keyDown)
-  document.addEventListener("keyup", keyUp)
+  // document.addEventListener("keyup", keyUp)
   initVaris();
   loadGameField();
   // checkInput();
