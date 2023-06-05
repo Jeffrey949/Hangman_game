@@ -1,13 +1,14 @@
 function gameOn() {
-  let zufall, le, eingabe, counter, correct_word, charIndex;
+  let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter;
 
   function initVaris() {
     le = wörter.length;
     zufall = Math.floor(Math.random() * le);
     eingabe = "";
-    counter = 0;
+    mistakeCounter = 0;
     correct_word = wörter[zufall].toUpperCase();
     charIndex = [];
+    charCounter = 0;
   }
 
 
@@ -17,7 +18,8 @@ function gameOn() {
     for (let i = 0; i < correct_word.length; i++) {
       char = create("p")
       char.innerHTML = "_"
-      char.id = i
+      // char.id = "a" + i
+      char.setAttribute("data-id", i)
       el('#word-section').append(char);
     }
   }
@@ -29,7 +31,8 @@ function gameOn() {
     checkInput();
     // showChar();
     drawSketch();
-
+    console.log(charCounter);
+    checkEnd();
   }
 
   function checkInput() {
@@ -44,13 +47,17 @@ function gameOn() {
       }
       // Platzhalter mit zutreffenden Buchstaben ersetzen
       for (let i = 0; i < charIndex.length; i++) {
-        document.getElementById(charIndex[i]).innerText = correct_word[charIndex[i]];
-        // el(`#${charIndex[i]}`).innerText = correct_word[charIndex[i]];
+        // document.getElementById(charIndex[i]).innerText = correct_word[charIndex[i]];
+        // el(`#a${charIndex[i]}`).innerText = correct_word[charIndex[i]];
+        if (el(`[data-id="${charIndex[i]}"]`).innerText != correct_word[charIndex[i]] ) {
+          el(`[data-id="${charIndex[i]}"]`).innerText = correct_word[charIndex[i]];
+          charCounter ++;
+        }
       }
       // Fall für falsche Eingabe
     } else {
-      // Fehler Counter wird erhöht und falsche Buchstabe im Feld hinterlegt
-      counter += 1;
+      // Fehler mistakeCounter wird erhöht und falsche Buchstabe im Feld hinterlegt
+      mistakeCounter += 1;
       char = create("li");
       char.innerText = eingabe;
       el('#kasten-buchstaben ul').append(char);
@@ -58,10 +65,22 @@ function gameOn() {
   }
 
   function drawSketch() {
-    // Abhängig der des Counter-Wertes, werden Teile der Skizze angezeigt
-    if (counter > 0 && counter < 10) {
-      // el(`#${counter + 100}`).classList.remove("passiv");
-      document.getElementById((counter + 100)).classList.remove("passiv")
+    // Abhängig der des mistakeCounter-Wertes, werden Teile der Skizze angezeigt
+    if (mistakeCounter > 0 && mistakeCounter < 10) {
+      // el(`#${mistakeCounter + 100}`).classList.remove("passiv");
+      // document.getElementById((mistakeCounter + 100)).classList.remove("passiv")
+      el(`[data-id="${mistakeCounter + 100}"]`).classList.remove("passiv");
+    }
+  }
+
+  function checkEnd() {
+    // Check ob das Wort gelöst wurde
+    if (charCounter === correct_word.length) {
+      // Kasten Buchstaben verschwinden lassen
+      el("#kasten-buchstaben").className = "passiv"
+      // Text Ausgabe mit der verbrauchten Zeit
+      // verbrauchte Klicks
+
     }
   }
 
