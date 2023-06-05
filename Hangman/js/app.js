@@ -1,5 +1,5 @@
 function gameOn() {
-  let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter;
+  let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter, startTime, stopTime;
 
   function initVaris() {
     le = wörter.length;
@@ -9,19 +9,25 @@ function gameOn() {
     correct_word = wörter[zufall].toUpperCase();
     charIndex = [];
     charCounter = 0;
+    startTime = new Date();
   }
 
 
   function loadGameField() {
     let char;
+    // Entferne Button
+    el("#start").className = "passiv";
+    // Feld für falsche Buchstaben einblenden
+    el("fieldset").classList.remove("passiv");
     // Unterstriche abhängig der Wortlänge erstellen
     for (let i = 0; i < correct_word.length; i++) {
-      char = create("p")
-      char.innerHTML = "_"
+      char = create("p");
+      char.innerHTML = "_";
       // char.id = "a" + i
-      char.setAttribute("data-id", i)
+      char.setAttribute("data-id", i);
       el('#word-section').append(char);
     }
+
   }
 
 
@@ -33,6 +39,7 @@ function gameOn() {
     drawSketch();
     console.log(charCounter);
     checkEnd();
+    el("#fehler").innerText = `Fehler: ${mistakeCounter}`;
   }
 
   function checkInput() {
@@ -75,11 +82,28 @@ function gameOn() {
 
   function checkEnd() {
     // Check ob das Wort gelöst wurde
+    // Check auf Basis der falschen Eingabe fehlt noch
     if (charCounter === correct_word.length) {
-      // Kasten Buchstaben verschwinden lassen
-      el("#kasten-buchstaben").className = "passiv"
-      // Text Ausgabe mit der verbrauchten Zeit
-      // verbrauchte Klicks
+      // Falsch eingegbene Buchstaben ausblenden
+      el("#kasten-buchstaben ul").className = "passiv"
+      // Auswertung mit verschiedenen Daten anzeigen lassen
+      el("fieldset legend").innerText = "Deine Auswertung"
+      stopTime = new Date();
+      let time = stopTime - startTime;
+      let text = create("p");
+      text.innerText = `
+      🎲 ${correct_word} war dein zufälliges Wort
+      ⏱️  ${time / 1000} sek benötigt
+      ❌  ${mistakeCounter} Fehleingaben gemacht`
+      el("#kasten-buchstaben").append(text);
+      // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
+      group("#word-section p").forEach((tag) => {
+        tag.className = "passiv";
+      });
+      el(".galgen").className = "passiv"
+      el("#text-place").className = "passiv"
+      el("#start").classList.remove("passiv");
+      el("#start").innerText = "Neues Spiel";
 
     }
   }
@@ -97,10 +121,10 @@ function gameOn() {
   // }
 
 
-  document.addEventListener("keydown", keyDown)
+  document.addEventListener("keydown", keyDown);
+  el("#start").addEventListener("click", loadGameField);
   // document.addEventListener("keyup", keyUp)
   initVaris();
-  loadGameField();
   // checkInput();
   console.log(correct_word);
 

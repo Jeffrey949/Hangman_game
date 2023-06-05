@@ -1,5 +1,5 @@
 #wrapper {
-  border: 3px solid green;
+  /* border: 3px solid green; */
   width: 100%;
   height: 100%;
   position: relative;
@@ -20,7 +20,7 @@
 #word-section{
   width: 70%;
   height: 300px;
-  border: solid 2px white;
+  /* border: solid 2px white; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
