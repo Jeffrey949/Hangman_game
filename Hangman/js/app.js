@@ -19,6 +19,7 @@ function gameOn() {
     el("#start").className = "passiv";
     // Feld für falsche Buchstaben einblenden
     el("fieldset").classList.remove("passiv");
+    el("fieldset legend").innerHTML = "<strong>Deine falsch genannten Buchstaben</strong>"
     // Unterstriche abhängig der Wortlänge erstellen
     for (let i = 0; i < correct_word.length; i++) {
       char = create("p");
@@ -28,6 +29,16 @@ function gameOn() {
       el('#word-section').append(char);
     }
 
+    el(".galgen").classList.remove("passiv");
+
+    // Alle komponenten des Galgenmänchen erhalten die klasse passiv
+
+    group(".galgen div").forEach((div) => {
+      div.classList.add("passiv");
+    });
+
+    el("#kasten-buchstaben").innerHTML = "<ul></ul>";
+    el("#fehler").innerText = "Fehler: 0";
   }
 
 
@@ -84,8 +95,9 @@ function gameOn() {
     // Check ob das Wort gelöst wurde
     // Check auf Basis der falschen Eingabe fehlt noch
     if (charCounter === correct_word.length) {
-      // Falsch eingegbene Buchstaben ausblenden
-      el("#kasten-buchstaben ul").className = "passiv"
+      // Buchstaben Kasten leeren
+      // el("#kasten-buchstaben ul").className = "passiv"
+      el("#kasten-buchstaben").innerHTML = "<ul></ul>";
       // Auswertung mit verschiedenen Daten anzeigen lassen
       el("fieldset legend").innerText = "Deine Auswertung"
       stopTime = new Date();
@@ -97,15 +109,22 @@ function gameOn() {
       ❌  ${mistakeCounter} Fehleingaben gemacht`
       el("#kasten-buchstaben").append(text);
       // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
-      group("#word-section p").forEach((tag) => {
-        tag.className = "passiv";
-      });
-      el(".galgen").className = "passiv"
+      el("#word-section").innerHTML = ""
+      // group("#word-section p").forEach((tag) => {
+      //   tag.className = "passiv";
+      // });
+      el(".galgen").classList.add("passiv")
       el("#text-place").className = "passiv"
-      el("#start").classList.remove("passiv");
-      el("#start").innerText = "Neues Spiel";
+      el("#new").classList.remove("passiv");
 
     }
+  }
+
+  function newGame() {
+    this.className = "passiv";
+    initVaris();
+    loadGameField();
+    el("#text-place").className = "";
   }
 
   // function showChar() {
@@ -123,6 +142,8 @@ function gameOn() {
 
   document.addEventListener("keydown", keyDown);
   el("#start").addEventListener("click", loadGameField);
+  el("#new").addEventListener("click", newGame);
+
   // document.addEventListener("keyup", keyUp)
   initVaris();
   // checkInput();

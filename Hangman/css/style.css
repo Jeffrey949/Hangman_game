@@ -18,7 +18,7 @@ h1 {
   display: none;
 }
 
-#start{
+button{
   position: absolute;
   top: 150px;
   left: 350px;
@@ -26,4 +26,3 @@ h1 {
   border-radius: 8px;
   cursor: pointer;
 }
-
