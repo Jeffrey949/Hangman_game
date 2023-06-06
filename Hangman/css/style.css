@@ -18,11 +18,28 @@ h1 {
   display: none;
 }
 
-button{
+#wrapper button{
   position: absolute;
   top: 150px;
   left: 350px;
   padding: 28px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+#top-bar button{
+  border-radius: 8px;
+  cursor: pointer;
+  width: 130px;
+  height: 75px;
+  margin: 20px 0px;
+}
+
+#top-bar{
+  display: flex;
+  justify-content: space-between;
+}
+
+#top-bar p {
+  font-size: 40px;
 }

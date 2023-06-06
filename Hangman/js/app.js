@@ -1,5 +1,5 @@
 function gameOn() {
-  let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter, startTime, stopTime;
+  let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter, startTime, stopTime, timer;
 
   function initVaris() {
     le = wörter.length;
@@ -10,6 +10,7 @@ function gameOn() {
     charIndex = [];
     charCounter = 0;
     startTime = new Date();
+    timer = 30;
   }
 
 
@@ -46,10 +47,9 @@ function gameOn() {
     // Speichern des eigegebenen Buchstaben (Uppercase)
     eingabe = e.key.toUpperCase();
     checkInput();
-    // showChar();
     drawSketch();
     console.log(charCounter);
-    checkEnd();
+    // checkEnd();
     el("#fehler").innerText = `Fehler: ${mistakeCounter}`;
   }
 
@@ -94,7 +94,7 @@ function gameOn() {
   function checkEnd() {
     // Check ob das Wort gelöst wurde
     // Check auf Basis der falschen Eingabe fehlt noch
-    if (charCounter === correct_word.length) {
+    if (charCounter === correct_word.length || mistakeCounter === 10 || timer === 0) {
       // Buchstaben Kasten leeren
       // el("#kasten-buchstaben ul").className = "passiv"
       el("#kasten-buchstaben").innerHTML = "<ul></ul>";
@@ -110,46 +110,51 @@ function gameOn() {
       el("#kasten-buchstaben").append(text);
       // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
       el("#word-section").innerHTML = ""
-      // group("#word-section p").forEach((tag) => {
-      //   tag.className = "passiv";
-      // });
       el(".galgen").classList.add("passiv")
       el("#text-place").className = "passiv"
       el("#new").classList.remove("passiv");
-
+      return
     }
+    setTimeout(() => {
+      checkEnd();
+    }, 100);
   }
 
   function newGame() {
-    this.className = "passiv";
+    el("#new").className = "passiv";
     initVaris();
     loadGameField();
     el("#text-place").className = "";
   }
 
-  // function showChar() {
-  //   for (let i = 0; i < charIndex.length; i++) {
-  //     document.getElementById(charIndex[i]).innerText = correct_word[charIndex[i]];
-  //     // el(`#${charIndex[i]}`).innerText = correct_word[charIndex[i]];
-  //   }
-  // }
+  function countdown() {
+    if (timer != 0) {
+      timer --;
+      el("#timer").innerText = `${timer} Sek`;
+    }
+  }
 
-
-  // function keyUp(e) {
-
-  // }
+  //##################################################
 
 
   document.addEventListener("keydown", keyDown);
-  el("#start").addEventListener("click", loadGameField);
-  el("#new").addEventListener("click", newGame);
 
-  // document.addEventListener("keyup", keyUp)
+  el("#start").addEventListener("click", function() {
+    loadGameField();
+    setInterval(() => {
+      countdown();
+    }, 1000);
+  });
+
+  el("#new").addEventListener("click", function() {
+    newGame();
+    checkEnd();
+  });
+
+//###########################################################
   initVaris();
-  // checkInput();
+  checkEnd();
   console.log(correct_word);
-
-
 }
 
 gameOn();
