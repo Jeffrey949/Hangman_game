@@ -1,5 +1,5 @@
 function gameOn() {
-  let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter, startTime, stopTime, timer;
+  let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter, startTime, stopTime, timer, gameRunning;
 
   function initVaris() {
     le = wörter.length;
@@ -10,12 +10,13 @@ function gameOn() {
     charIndex = [];
     charCounter = 0;
     startTime = new Date();
-    timer = 30;
+    gameRunning = false;
   }
 
 
   function loadGameField() {
     let char;
+    gameRunning = !gameRunning;
     // Entferne Button
     el("#start").className = "passiv";
     // Feld für falsche Buchstaben einblenden
@@ -98,6 +99,7 @@ function gameOn() {
     if (charCounter === correct_word.length || mistakeCounter === 10 || timer === 0) {
       // Buchstaben Kasten leeren
       // el("#kasten-buchstaben ul").className = "passiv"
+      gameRunning = !gameRunning;
       makePartsFall();
       setTimeout(() => {
         el("#kasten-buchstaben").innerHTML = "<ul></ul>";
@@ -117,7 +119,6 @@ function gameOn() {
         el("#text-place").className = "passiv"
         el("#new").classList.remove("passiv");
       }, 2000);
-
       return
     }
     setTimeout(() => {
@@ -133,7 +134,7 @@ function gameOn() {
   }
 
   function countdown() {
-    if (timer != 0) {
+    if (timer != 0 && gameRunning) {
       timer --;
       el("#timer").innerText = `${timer} Sek`;
     }
@@ -152,10 +153,17 @@ function gameOn() {
     }, 500);
   }
 
+  function changeTimer() {
+    timer = parseInt(this.value);
+    el("#timer").innerText = `${timer} Sek`;
+  }
+
   //##################################################
 
 
   document.addEventListener("keydown", keyDown);
+
+  el("#timer-range").addEventListener("input", changeTimer);
 
   el("#start").addEventListener("click", function() {
     loadGameField();
