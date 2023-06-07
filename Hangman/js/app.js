@@ -25,17 +25,18 @@ function gameOn() {
     for (let i = 0; i < correct_word.length; i++) {
       char = create("p");
       char.innerHTML = "_";
-      // char.id = "a" + i
       char.setAttribute("data-id", i);
       el('#word-section').append(char);
     }
-
+    // Übergeordnete Klasse um Einzelteile wieder anzeigen zu können
     el(".galgen").classList.remove("passiv");
-
     // Alle komponenten des Galgenmänchen erhalten die klasse passiv
+    // Falldown logik entfernen
 
-    group(".galgen div").forEach((div) => {
+    group(".galgen div").forEach((div, index) => {
+      div.classList.remove("red");
       div.classList.add("passiv");
+      div.classList.remove("fall-down");
     });
 
     el("#kasten-buchstaben").innerHTML = "<ul></ul>";
@@ -97,22 +98,26 @@ function gameOn() {
     if (charCounter === correct_word.length || mistakeCounter === 10 || timer === 0) {
       // Buchstaben Kasten leeren
       // el("#kasten-buchstaben ul").className = "passiv"
-      el("#kasten-buchstaben").innerHTML = "<ul></ul>";
-      // Auswertung mit verschiedenen Daten anzeigen lassen
-      el("fieldset legend").innerText = "Deine Auswertung"
-      stopTime = new Date();
-      let time = stopTime - startTime;
-      let text = create("p");
-      text.innerText = `
-      🎲 ${correct_word} war dein zufälliges Wort
-      ⏱️  ${time / 1000} sek benötigt
-      ❌  ${mistakeCounter} Fehleingaben gemacht`
-      el("#kasten-buchstaben").append(text);
-      // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
-      el("#word-section").innerHTML = ""
-      el(".galgen").classList.add("passiv")
-      el("#text-place").className = "passiv"
-      el("#new").classList.remove("passiv");
+      makePartsFall();
+      setTimeout(() => {
+        el("#kasten-buchstaben").innerHTML = "<ul></ul>";
+        // Auswertung mit verschiedenen Daten anzeigen lassen
+        el("fieldset legend").innerText = "Deine Auswertung"
+        stopTime = new Date();
+        let time = stopTime - startTime;
+        let text = create("p");
+        text.innerText = `
+        🎲 ${correct_word} war dein zufälliges Wort
+        ⏱️  ${time / 1000} sek benötigt
+        ❌  ${mistakeCounter} Fehleingaben gemacht`
+        el("#kasten-buchstaben").append(text);
+        // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
+        el("#word-section").innerHTML = ""
+        el(".galgen").classList.add("passiv")
+        el("#text-place").className = "passiv"
+        el("#new").classList.remove("passiv");
+      }, 2000);
+
       return
     }
     setTimeout(() => {
@@ -132,6 +137,19 @@ function gameOn() {
       timer --;
       el("#timer").innerText = `${timer} Sek`;
     }
+  }
+
+  function makePartsFall() {
+    el('[data-id="104"]').classList.add("red");
+    setTimeout(() => {
+      group(".galgen div").forEach((part, index) => {
+      part.classList.remove("passiv")
+      if (index > 3) {
+        part.classList.add('fall-down');
+        part.classList.add("red");
+      }
+    });
+    }, 500);
   }
 
   //##################################################

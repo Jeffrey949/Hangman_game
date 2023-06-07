@@ -91,3 +91,40 @@
   left: 185px;
   transform: rotate(45deg);
 }
+
+.red {
+  background-color: #FF0000;
+  animation-name: headColorChange;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes headColorChange {
+  0% {
+    background-color: #FFCCCC;
+  }
+  50% {
+    background-color: #FF6666;
+  }
+  100% {
+    background-color: #FF0000;
+  }
+}
+
+.fall-down {
+  animation-name: fallDown;
+  animation-duration: 5s;
+  animation-fill-mode: both;
+}
+
+@keyframes fallDown {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(150px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(300px) rotate(360deg);
+  }
+}
