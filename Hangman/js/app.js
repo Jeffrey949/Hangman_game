@@ -179,12 +179,26 @@ function gameOn() {
     el("#timer").innerText = `${timer} Sek`;
   }
 
+  function changeMode() {
+    if (this.innerText === "Light Mode") {
+      this.innerHTML = "<strong>Dark Mode</strong>";
+      el("body").style.color = "black";
+      el("body").style.background = "white";
+    } else {
+      this.innerHTML = "<strong>Light Mode</strong>";
+      el("body").style.color = "white";
+      el("body").style.background = "black";
+    }
+  }
+
   //##################################################
 
 
   document.addEventListener("keydown", keyDown);
 
   el("#timer-range").addEventListener("input", changeTimer);
+
+  el("#switch").addEventListener("click", changeMode);
 
   el("#start").addEventListener("click", function() {
     loadGameField();
