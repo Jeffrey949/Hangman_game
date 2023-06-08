@@ -48,11 +48,13 @@ function gameOn() {
   function keyDown(e) {
     // Speichern des eigegebenen Buchstaben (Uppercase)
     eingabe = e.key.toUpperCase();
-    checkInput();
-    drawSketch();
-    console.log(charCounter);
-    // checkEnd();
-    el("#fehler").innerText = `Fehler: ${mistakeCounter}`;
+    if (gameRunning) {
+      checkInput();
+      drawSketch();
+      console.log(charCounter);
+      // checkEnd();
+      el("#fehler").innerText = `Fehler: ${mistakeCounter}`;
+    }
   }
 
   function checkInput() {
@@ -76,7 +78,7 @@ function gameOn() {
       }
       // Fall für falsche Eingabe
     } else {
-      // Fehler mistakeCounter wird erhöht und falsche Buchstabe im Feld hinterlegt
+      // mistakeCounter wird erhöht und falscher Buchstabe im Feld hinterlegt
       mistakeCounter += 1;
       char = create("li");
       char.innerText = eingabe;
@@ -93,36 +95,25 @@ function gameOn() {
 
   function checkEnd() {
     // Check ob das Wort gelöst wurde
-    // Check auf Basis der falschen Eingabe fehlt noch
-    if (charCounter === correct_word.length || mistakeCounter === 10 || timer === 0) {
-      // Buchstaben Kasten leeren
-      // el("#kasten-buchstaben ul").className = "passiv"
+    if (charCounter === correct_word.length) {
       gameRunning = !gameRunning;
       setTimeout(() => {
         timer = el("#timer-range").value;
         el("#timer").innerText = `${timer} Sek`;
       }, 3000);
-
-
-      makePartsFall();
+      correctGuessEffect();
+      setTimeout(() => {showResults()}, 2000);
+      return
+    }
+    // Check auf Basis der falschen Eingabe fehlt noch
+    if (mistakeCounter === 10 || timer === 0) {
+      gameRunning = !gameRunning;
       setTimeout(() => {
-        el("#kasten-buchstaben").innerHTML = "<ul></ul>";
-        // Auswertung mit verschiedenen Daten anzeigen lassen
-        el("fieldset legend").innerText = "Deine Auswertung"
-        stopTime = new Date();
-        let time = stopTime - startTime;
-        let text = create("p");
-        text.innerText = `
-        🎲 ${correct_word} war dein zufälliges Wort
-        ⏱️  ${time / 1000} sek benötigt
-        ❌  ${mistakeCounter} Fehleingaben gemacht`
-        el("#kasten-buchstaben").append(text);
-        // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
-        el("#word-section").innerHTML = ""
-        el(".galgen").classList.add("passiv")
-        el("#text-place").className = "passiv"
-        el("#new").classList.remove("passiv");
-      }, 2000);
+        timer = el("#timer-range").value;
+        el("#timer").innerText = `${timer} Sek`;
+      }, 3000);
+      makePartsFall();
+      setTimeout(() => {showResults()}, 2000);
       return
     }
     setTimeout(() => {
@@ -130,12 +121,28 @@ function gameOn() {
     }, 100);
   }
 
+  function showResults() {
+    el("#kasten-buchstaben").innerHTML = "<ul></ul>";
+    // Auswertung mit verschiedenen Daten anzeigen lassen
+    el("fieldset legend").innerText = "Deine Auswertung"
+    stopTime = new Date();
+    let time = stopTime - startTime;
+    let text = create("p");
+    text.innerText = `
+    🎲 ${correct_word} war dein zufälliges Wort
+    ⏱️  ${time / 1000} sek benötigt
+    ❌  ${mistakeCounter} Fehleingaben gemacht`;
+    el("#kasten-buchstaben").append(text);
+    // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
+    el("#word-section").innerHTML = "";
+    el(".galgen").classList.add("passiv");
+    el("#text-place").className = "passiv";
+    el("#new").classList.remove("passiv");
+  }
+
   function newGame() {
     el("#new").className = "passiv";
     initVaris();
-    // if (el("#timer-range").value === 0) {
-    //   el("#timer-range").value =
-    // }
     loadGameField();
     el("#text-place").className = "";
   }
@@ -158,6 +165,12 @@ function gameOn() {
       }
     });
     }, 500);
+  }
+
+  function correctGuessEffect() {
+    group("#word-section p").forEach((p) => {
+      p.style.color = "green";
+    })
   }
 
   function changeTimer() {
