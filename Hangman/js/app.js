@@ -11,6 +11,7 @@ function gameOn() {
     charCounter = 0;
     startTime = new Date();
     gameRunning = false;
+    timer = el("#timer-range").value;
   }
 
 
@@ -32,14 +33,13 @@ function gameOn() {
     // Übergeordnete Klasse um Einzelteile wieder anzeigen zu können
     el(".galgen").classList.remove("passiv");
     // Alle komponenten des Galgenmänchen erhalten die klasse passiv
-    // Falldown logik entfernen
-
+    // Falldown logik entfernen und Kopf auf default Zustand setzen
     group(".galgen div").forEach((div, index) => {
       div.classList.remove("red");
       div.classList.add("passiv");
       div.classList.remove("fall-down");
     });
-
+    // Default Status festlegen
     el("#kasten-buchstaben").innerHTML = "<ul></ul>";
     el("#fehler").innerText = "Fehler: 0";
   }
@@ -87,8 +87,6 @@ function gameOn() {
   function drawSketch() {
     // Abhängig der des mistakeCounter-Wertes, werden Teile der Skizze angezeigt
     if (mistakeCounter > 0 && mistakeCounter < 10) {
-      // el(`#${mistakeCounter + 100}`).classList.remove("passiv");
-      // document.getElementById((mistakeCounter + 100)).classList.remove("passiv")
       el(`[data-id="${mistakeCounter + 100}"]`).classList.remove("passiv");
     }
   }
@@ -100,6 +98,12 @@ function gameOn() {
       // Buchstaben Kasten leeren
       // el("#kasten-buchstaben ul").className = "passiv"
       gameRunning = !gameRunning;
+      setTimeout(() => {
+        timer = el("#timer-range").value;
+        el("#timer").innerText = `${timer} Sek`;
+      }, 3000);
+
+
       makePartsFall();
       setTimeout(() => {
         el("#kasten-buchstaben").innerHTML = "<ul></ul>";
@@ -129,6 +133,9 @@ function gameOn() {
   function newGame() {
     el("#new").className = "passiv";
     initVaris();
+    // if (el("#timer-range").value === 0) {
+    //   el("#timer-range").value =
+    // }
     loadGameField();
     el("#text-place").className = "";
   }
@@ -155,6 +162,7 @@ function gameOn() {
 
   function changeTimer() {
     timer = parseInt(this.value);
+
     el("#timer").innerText = `${timer} Sek`;
   }
 
