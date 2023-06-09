@@ -2,22 +2,23 @@ function gameOn() {
   let zufall, le, eingabe, mistakeCounter, correct_word, charIndex, charCounter, startTime, stopTime, timer, gameRunning;
 
   function initVaris() {
-    le = wörter.length;
+    le = woerter.length;
     zufall = Math.floor(Math.random() * le);
     eingabe = "";
     mistakeCounter = 0;
-    correct_word = wörter[zufall].toUpperCase();
+    correct_word = woerter[zufall].toUpperCase();
     charIndex = [];
     charCounter = 0;
-    startTime = new Date();
     gameRunning = false;
     timer = el("#timer-range").value;
+    startTime = el("#timer-range").value;
   }
 
 
   function loadGameField() {
     let char;
     gameRunning = !gameRunning;
+    el("#timer-range").disabled = true;
     // Entferne Button
     el("#start").className = "passiv";
     // Feld für falsche Buchstaben einblenden
@@ -51,7 +52,6 @@ function gameOn() {
     if (gameRunning) {
       checkInput();
       drawSketch();
-      console.log(charCounter);
       // checkEnd();
       el("#fehler").innerText = `Fehler: ${mistakeCounter}`;
     }
@@ -69,8 +69,7 @@ function gameOn() {
       }
       // Platzhalter mit zutreffenden Buchstaben ersetzen
       for (let i = 0; i < charIndex.length; i++) {
-        // document.getElementById(charIndex[i]).innerText = correct_word[charIndex[i]];
-        // el(`#a${charIndex[i]}`).innerText = correct_word[charIndex[i]];
+        // Zusätzliche if Abfrage um anschließend mit CharCounter die Prüfung durchführen zu können
         if (el(`[data-id="${charIndex[i]}"]`).innerText != correct_word[charIndex[i]] ) {
           el(`[data-id="${charIndex[i]}"]`).innerText = correct_word[charIndex[i]];
           charCounter ++;
@@ -96,41 +95,42 @@ function gameOn() {
   function checkEnd() {
     // Check ob das Wort gelöst wurde
     if (charCounter === correct_word.length) {
-      gameRunning = !gameRunning;
-      setTimeout(() => {
-        timer = el("#timer-range").value;
-        el("#timer").innerText = `${timer} Sek`;
-      }, 3000);
+      firstChangesAfterEnd();
       correctGuessEffect();
-      setTimeout(() => {showResults()}, 2000);
       return
     }
-    // Check auf Basis der falschen Eingabe fehlt noch
+    // Check auf Basis der Falscheingaben oder Timer
     if (mistakeCounter === 10 || timer === 0) {
-      gameRunning = !gameRunning;
-      setTimeout(() => {
-        timer = el("#timer-range").value;
-        el("#timer").innerText = `${timer} Sek`;
-      }, 3000);
+      firstChangesAfterEnd();
       makePartsFall();
-      setTimeout(() => {showResults()}, 2000);
       return
     }
+    // Checkend muss permanent aufgerufen werden, um den Timer zu tracken
     setTimeout(() => {
       checkEnd();
     }, 100);
   }
 
+  function firstChangesAfterEnd( ) {
+    gameRunning = !gameRunning;
+    el("#timer-range").disabled = false;
+    stopTime = el("#timer").innerText.split(" ")[0];
+    setTimeout(() => {
+      timer = el("#timer-range").value;
+      el("#timer").innerText = `${timer} Sek`;
+    }, 3000);
+    setTimeout(() => {showResults()}, 2000);
+  }
+
+
   function showResults() {
     el("#kasten-buchstaben").innerHTML = "<ul></ul>";
     // Auswertung mit verschiedenen Daten anzeigen lassen
     el("fieldset legend").innerText = "Deine Auswertung"
-    stopTime = new Date();
-    let time = stopTime - startTime;
     let text = create("p");
     text.innerText = `
     🎲 ${correct_word} war dein zufälliges Wort
-    ⏱️  ${time / 1000} sek benötigt
+    ⏱️  ${startTime - stopTime} sek gespielt
     ❌  ${mistakeCounter} Fehleingaben gemacht`;
     el("#kasten-buchstaben").append(text);
     // Skizze und Wort ausblenden und durch Button fürs neue Spiel ersetzen
@@ -215,7 +215,6 @@ function gameOn() {
 //###########################################################
   initVaris();
   checkEnd();
-  console.log(correct_word);
 }
 
 gameOn();

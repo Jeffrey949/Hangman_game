@@ -1,4 +1,4 @@
-const wörter = [
+const woerter = [
   "Schokolade",
   "Telefon",
   "Elefant",

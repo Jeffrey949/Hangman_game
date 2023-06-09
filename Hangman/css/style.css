@@ -1,6 +1,6 @@
-
 @import "skizze.css";
 @import "wrapper.css";
+@import "upper_area.css";
 
 body {
   background-color: rgb(0, 0, 0);
@@ -15,31 +15,4 @@ h1 {
 
 .passiv {
   display: none;
-}
-
-#btn-area {
-  text-align: center;
-}
-
-#start, #new{
-  padding: 28px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#top-bar button{
-  border-radius: 8px;
-  cursor: pointer;
-  width: 130px;
-  height: 75px;
-  margin: 40px 0px;
-}
-
-#top-bar{
-  display: flex;
-  justify-content: space-between;
-}
-
-#top-bar p {
-  font-size: 40px;
 }
